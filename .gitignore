@@ -479,3 +479,5 @@ Patches/**/*.json
 *.V02
 *.V03
 *.VET
+imgui.ini
+Nippon.db
