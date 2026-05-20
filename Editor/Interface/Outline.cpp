@@ -1,6 +1,9 @@
 #include <Editor/Ecs/Registry.h>
 #include <Editor/Ecs/Entity.h>
 
+#include <Editor/Ecs/Components/Camera.h>
+#include <Editor/Ecs/Components/Transform.h>
+
 #include <Editor/Export/WavefrontExporter.h>
 
 #include <Editor/Font/MaterialDesignIcons.h>
@@ -15,10 +18,13 @@
 namespace Nippon
 {
 	static Entity* sSelectedEntity = nullptr;
+	static bool sFocusPlayer = false;
+	static R32V3 sFocusPlayerPosition = {};
 
 	void Outline::Reset()
 	{
 		sSelectedEntity = nullptr;
+		sFocusPlayer = false;
 	}
 
 	void Outline::Render()
@@ -29,6 +35,20 @@ namespace Nippon
 		{
 			if (Registry* registry = scene->GetRegistry())
 			{
+				if (sFocusPlayer)
+				{
+					if (Transform* playerTransform = registry->GetPlayerEntity()->GetTransform())
+					{
+						R32V3 delta = sFocusPlayerPosition - playerTransform->GetWorldPosition();
+						R32 alpha = glm::min(ImGui::GetIO().DeltaTime * 8.0F, 1.0F);
+
+						playerTransform->SetPosition(playerTransform->GetLocalPosition() + delta * alpha);
+						scene->Invalidate();
+
+						sFocusPlayer = glm::length(delta) > 0.01F;
+					}
+				}
+
 				if (Entity* entity = registry->GetRootEntity())
 
 				DrawEntityTreeRecursive(scene, entity);
@@ -77,6 +97,22 @@ namespace Nippon
 			sSelectedEntity = Entity;
 
 			Scene->Invalidate();
+		}
+
+		if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+		{
+			if (Registry* registry = Scene->GetRegistry())
+			{
+				if (Transform* playerTransform = registry->GetPlayerEntity()->GetTransform())
+				{
+					R32V3 center = Entity->GetTransform()->GetWorldPosition() + Entity->GetAABB().GetCenter();
+					R32 radius = glm::length(Entity->GetAABB().GetSize()) * 0.5F;
+					R32 distance = glm::max(radius / glm::tan(glm::radians(registry->GetMainCamera()->GetFov()) * 0.5F) * 1.25F, 10.0F);
+
+					sFocusPlayerPosition = center + playerTransform->GetLocalFront() * distance;
+					sFocusPlayer = true;
+				}
+			}
 		}
 
 		if (ImGui::BeginPopupContextItem("Outline Context Menu"))
