@@ -105,12 +105,12 @@ namespace Nippon
 
 	bool Viewport::HasGainedFocus()
 	{
-		return !mIsFocused && ImGui::IsWindowFocused();
+		return !mIsFocused && HasFocus();
 	}
 
 	bool Viewport::HasFocus()
 	{
-		return mIsFocused = ImGui::IsWindowFocused();
+		return mIsFocused = ImGui::IsWindowFocused() || (ImGui::IsWindowHovered() && (Event::MouseDown(eMouseCodeLeft) || Event::MouseDown(eMouseCodeRight) || Event::MouseDown(eMouseCodeMiddle) || Event::MouseHeld(eMouseCodeRight) || Event::MouseHeld(eMouseCodeMiddle)));
 	}
 
 	bool Viewport::HasLostFocus()
