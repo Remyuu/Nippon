@@ -63,6 +63,11 @@ namespace Nippon
 		return sSelectedEntity;
 	}
 
+	void Outline::CancelFocus()
+	{
+		sFocusPlayer = false;
+	}
+
 	void Outline::SetSelectedEntity(Entity* Entity)
 	{
 		if (Entity)

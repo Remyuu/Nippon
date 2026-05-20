@@ -21,6 +21,7 @@ namespace Nippon
 
 	public:
 
+		static void CancelFocus();
 		static void SetSelectedEntity(Entity* Entity);
 
 	private:

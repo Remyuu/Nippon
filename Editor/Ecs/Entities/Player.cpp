@@ -69,6 +69,7 @@ namespace Nippon
 				}
 				if (Event::MouseDown(eMouseCodeMiddle))
 				{
+					Outline::CancelFocus();
 					mousePositionStart = Event::GetMousePosition();
 				}
 				if (Event::MouseHeld(eMouseCodeMiddle))
