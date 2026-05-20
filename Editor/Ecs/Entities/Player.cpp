@@ -1,6 +1,8 @@
 #include <Editor/Editor.h>
 #include <Editor/Event.h>
 
+#include <Common/Glm/geometric.hpp>
+
 #include <Editor/Ecs/Components/Camera.h>
 #include <Editor/Ecs/Components/CameraController.h>
 #include <Editor/Ecs/Components/Transform.h>
@@ -65,7 +67,31 @@ namespace Nippon
 				{
 					mousePositionStart = Event::GetMousePosition();
 				}
-				if (Event::MouseHeld(eMouseCodeRight) && Event::MouseHeld(eMouseCodeLeft))
+				if (Event::MouseDown(eMouseCodeMiddle))
+				{
+					mousePositionStart = Event::GetMousePosition();
+				}
+				if (Event::MouseHeld(eMouseCodeMiddle))
+				{
+					mousePositionDelta = mousePositionStart - Event::GetMousePosition();
+
+					if (Entity* entity = Outline::GetSelectedEntity())
+					{
+						R32V3 center = entity->GetTransform()->GetWorldPosition() + entity->GetAABB().GetCenter();
+						R32 distance = glm::length(GetTransform()->GetWorldPosition() - center);
+						R32V3 eulerAngles = GetTransform()->GetLocalEulerAngles();
+
+						eulerAngles.x += mousePositionDelta.y * mCameraController->GetMouseRotationSpeed() * gDeltaTime;
+						eulerAngles.y += mousePositionDelta.x * mCameraController->GetMouseRotationSpeed() * gDeltaTime;
+
+						if (eulerAngles.x <= -90.0F) eulerAngles.x = -90.0F;
+						if (eulerAngles.x >= 90.0F) eulerAngles.x = 90.0F;
+
+						GetTransform()->SetRotation(eulerAngles);
+						GetTransform()->SetPosition(center + GetTransform()->GetLocalFront() * distance);
+					}
+				}
+				else if (Event::MouseHeld(eMouseCodeRight) && Event::MouseHeld(eMouseCodeLeft))
 				{
 					mousePositionDelta = mousePositionStart - Event::GetMousePosition();
 
