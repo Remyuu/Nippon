@@ -164,7 +164,7 @@ namespace Nippon
 		{
 			R32 mouseWheel = ImGui::GetIO().MouseWheel;
 
-			if (mouseWheel != 0.0F)
+			if (mouseWheel != 0.0F && ImGui::IsWindowHovered())
 			{
 				Registry* registry = mScene->GetRegistry();
 				Transform* playerTransform = registry->GetPlayerEntity()->GetTransform();
