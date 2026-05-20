@@ -107,8 +107,8 @@ static void ImGuiSetupIo()
 
 	io.ConfigWindowsMoveFromTitleBarOnly = true;
 
-	io.Fonts->AddFontFromFileTTF("CommitMono-400-Regular.otf", 14.0f);
-	io.Fonts->AddFontFromFileTTF("MaterialDesignIcons-Webfont.ttf", 14.0f, &fontConfig, glyphRanges);
+	io.Fonts->AddFontFromFileTTF("Misc/CommitMono-400-Regular.otf", 14.0f);
+	io.Fonts->AddFontFromFileTTF("Misc/MaterialDesignIcons-Webfont.ttf", 14.0f, &fontConfig, glyphRanges);
 	io.Fonts->Build();
 }
 static void ImGuiSetupStyle()

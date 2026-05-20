@@ -29,8 +29,8 @@ namespace Nippon
 
 		mDebugStaticMesh = new (Memory::Alloc(sizeof(StaticMesh))) StaticMesh{ MeshType::eMeshTypeDebug };
 
-		mDefaultMeshShader = new (Memory::Alloc(sizeof(Shader))) Shader{ "DefaultVertexShader.glsl", "DefaultFragmentShader.glsl" };
-		mDebugMeshShader = new (Memory::Alloc(sizeof(Shader))) Shader{ "DebugVertexShader.glsl", "DebugFragmentShader.glsl" };
+		mDefaultMeshShader = new (Memory::Alloc(sizeof(Shader))) Shader{ "Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl" };
+		mDebugMeshShader = new (Memory::Alloc(sizeof(Shader))) Shader{ "Shaders/DebugVertexShader.glsl", "Shaders/DebugFragmentShader.glsl" };
 
 		mDebugVertexBuffer = (DebugVertex*)Memory::Alloc(sizeof(DebugVertex) * DEBUG_VERTEX_BUFFER_SIZE);
 		mDebugIndexBuffer = (U32*)Memory::Alloc(sizeof(U32) * DEBUG_INDEX_BUFFER_SIZE);
