@@ -31,6 +31,8 @@
 
 #define UPDATE_FPS (/*1.0F / 120.0F*/ 0.0F)
 #define RENDER_FPS (/*1.0F / 120.0F*/ 0.0F)
+#define UI_SCALE 1.25F
+#define UI_FONT_SIZE (14.0F * UI_SCALE)
 
 namespace Nippon
 {
@@ -107,8 +109,8 @@ static void ImGuiSetupIo()
 
 	io.ConfigWindowsMoveFromTitleBarOnly = true;
 
-	io.Fonts->AddFontFromFileTTF("Misc/CommitMono-400-Regular.otf", 14.0f);
-	io.Fonts->AddFontFromFileTTF("Misc/MaterialDesignIcons-Webfont.ttf", 14.0f, &fontConfig, glyphRanges);
+	io.Fonts->AddFontFromFileTTF("Misc/CommitMono-400-Regular.otf", UI_FONT_SIZE);
+	io.Fonts->AddFontFromFileTTF("Misc/MaterialDesignIcons-Webfont.ttf", UI_FONT_SIZE, &fontConfig, glyphRanges);
 	io.Fonts->Build();
 }
 static void ImGuiSetupStyle()
@@ -199,6 +201,8 @@ static void ImGuiSetupStyle()
 	style.Colors[ImGuiCol_NavWindowingHighlight] = ImVec4{ 1.0F, 0.3882353007793427F, 0.0F, 1.0F };
 	style.Colors[ImGuiCol_NavWindowingDimBg] = ImVec4{ 0.0F, 0.0F, 0.0F, 0.5860000252723694F };
 	style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4{ 0.0F, 0.0F, 0.0F, 0.5860000252723694F };
+
+	style.ScaleAllSizes(UI_SCALE);
 }
 
 I32 main(I32 Argc, char** Argv)
