@@ -1,6 +1,7 @@
 #include <Editor/Event.h>
 
 #include <Editor/Ecs/Registry.h>
+#include <Editor/Ecs/Components/Transform.h>
 
 #include <Editor/Font/MaterialDesignIcons.h>
 
@@ -110,7 +111,7 @@ namespace Nippon
 
 	bool Viewport::HasFocus()
 	{
-		return mIsFocused = ImGui::IsWindowFocused() || (ImGui::IsWindowHovered() && (Event::MouseDown(eMouseCodeLeft) || Event::MouseDown(eMouseCodeRight) || Event::MouseDown(eMouseCodeMiddle) || Event::MouseHeld(eMouseCodeRight) || Event::MouseHeld(eMouseCodeMiddle)));
+		return mIsFocused = ImGui::IsWindowFocused() || (ImGui::IsWindowHovered() && (Event::MouseDown(eMouseCodeLeft) || Event::MouseDown(eMouseCodeRight) || Event::MouseDown(eMouseCodeMiddle) || Event::MouseHeld(eMouseCodeRight) || Event::MouseHeld(eMouseCodeMiddle) || ImGui::GetIO().MouseWheel != 0.0F));
 	}
 
 	bool Viewport::HasLostFocus()
@@ -156,6 +157,27 @@ namespace Nippon
 
 					Outline::SetSelectedEntity(entity);
 				}
+			}
+		}
+
+		if (Entity* entity = Outline::GetSelectedEntity())
+		{
+			R32 mouseWheel = ImGui::GetIO().MouseWheel;
+
+			if (mouseWheel != 0.0F)
+			{
+				Registry* registry = mScene->GetRegistry();
+				Transform* playerTransform = registry->GetPlayerEntity()->GetTransform();
+
+				Outline::CancelFocus();
+
+				R32V3 center = entity->GetTransform()->GetWorldPosition() + entity->GetAABB().GetCenter();
+				R32 radius = glm::max(glm::length(entity->GetAABB().GetSize()) * 0.5F, 1.0F);
+				R32V3 offset = playerTransform->GetWorldPosition() - center;
+				R32 offsetLength = glm::length(offset);
+				R32 distance = glm::max(offsetLength - mouseWheel * radius * 0.25F, radius * 0.25F);
+
+				if (offsetLength > 0.001F) playerTransform->SetPosition(center + glm::normalize(offset) * distance);
 			}
 		}
 	}
