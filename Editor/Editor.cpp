@@ -31,7 +31,7 @@
 
 #define UPDATE_FPS (/*1.0F / 120.0F*/ 0.0F)
 #define RENDER_FPS (/*1.0F / 120.0F*/ 0.0F)
-#define UI_SCALE 1.25F
+#define UI_SCALE 1.5F
 #define UI_FONT_SIZE (14.0F * UI_SCALE)
 
 namespace Nippon
